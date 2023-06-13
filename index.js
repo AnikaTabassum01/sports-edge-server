@@ -27,10 +27,28 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const usersCollection = client.db("sportsEdgeDb").collection("users");
     const instructorCollection = client.db("sportsEdgeDb").collection("instructors");
     const classCollection = client.db("sportsEdgeDb").collection("allClasses");
     const selectedClassCollection = client.db("sportsEdgeDb").collection("selectedClass");
     const reviewCollection = client.db("sportsEdgeDb").collection("reviews");
+
+    // users related apis
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const query = { email: user?.email }
+      const existingUser = await usersCollection.findOne(query);
+       if (existingUser) {
+         return res.send({})
+       }
+      const result = await usersCollection.insertOne(user)
+      res.send(result)
+    })
+
+    app.get('/allUsers', async (req, res) => {
+      const result = await usersCollection.find().toArray()
+      res.send(result)
+  })
 
     app.get('/instructor', async(req, res) => {
       const result = await instructorCollection.find().toArray();
@@ -67,8 +85,8 @@ async function run() {
 
     app.delete('/selectedClass/:id', async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
-      const result = await selectedClassCollection.deleteOne(query)
+      const query = { _id: new ObjectId(id) };
+      const result = await selectedClassCollection.deleteOne(query);
       res.send(result)
   })
 
