@@ -30,6 +30,7 @@ async function run() {
     const instructorCollection = client.db("sportsEdgeDb").collection("instructors");
     const classCollection = client.db("sportsEdgeDb").collection("allClasses");
     const selectedClassCollection = client.db("sportsEdgeDb").collection("selectedClass");
+    const reviewCollection = client.db("sportsEdgeDb").collection("reviews");
 
     app.get('/instructor', async(req, res) => {
       const result = await instructorCollection.find().toArray();
@@ -41,11 +42,16 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/reviews', async(req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
+    })
+
     // selected class api
     app.post('/selectedClass', async(req, res) => {
-      const selectedClassCollection = req.body;
+      const selectedClass = req.body;
       console.log(selectedClass);
-      const result = await selectedClassCollection.insertOne();
+      const result = await selectedClassCollection.insertOne(selectedClass);
       res.send(result);
     })
 
