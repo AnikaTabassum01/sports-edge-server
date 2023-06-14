@@ -35,7 +35,16 @@ async function run() {
     const reviewCollection = client.db("sportsEdgeDb").collection("reviews");
 
     // users related apis
-   
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email }
+      const existingUser = await usersCollection.findOne(query);
+       if (existingUser) {
+         return res.send({})
+       }
+      const result = await usersCollection.insertOne(user)
+      res.send(result)
+    })
 
     app.patch('/users/admin/:id', async(req, res) => {
       const id = req.params.id;
