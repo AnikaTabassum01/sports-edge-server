@@ -37,7 +37,7 @@ async function run() {
     // users related apis
     app.post('/users', async (req, res) => {
       const user = req.body;
-      const query = { email: user?.email }
+      const query = { email: user.email }
       const existingUser = await usersCollection.findOne(query);
        if (existingUser) {
          return res.send({})
@@ -92,12 +92,12 @@ async function run() {
       res.send(result);
     });
 
-    app.post('/selectedClass', async(req, res) => {
-      const selectedClass = req.body;
-      console.log(selectedClass);
-      const result = await selectedClassCollection.insertOne(selectedClass);
-      res.send(result);
-    })
+    // app.post('/selectedClass', async(req, res) => {
+    //   const selectedClass = req.body;
+    //   console.log(selectedClass);
+    //   const result = await selectedClassCollection.insertOne(selectedClass);
+    //   res.send(result);
+    // })
 
     app.delete('/selectedClass/:id', async (req, res) => {
       const id = req.params.id;
